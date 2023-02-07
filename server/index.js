@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express()
-const port = 5000
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
@@ -22,6 +21,9 @@ mongoose.connect(config.mongoURI)
 .then(() => console.log('MongoDB Connected'))
 .catch((e) => console.log('MongoDB error: ', e));
 
+app.get('/api/hello', (req, res) => {
+    res.send("안녕하세요~")
+}) //App.js에서 받아옴
 
 app.get('/', (req, res) => {
   res.send('Hello World!, 새해 복 많이 받으세요.')
@@ -65,7 +67,7 @@ app.post('/login', (req, res) => {
                 if(err) return res.status(400).send(err); //status(400) : 에러 & send(err) : 에러메시지
                 
                 //현재 user에 토큰이 저장됨 (User.js의 코드로)
-                //토큰을 저장한다. 어디에?  -> 쿠키!
+                //토큰을 저장한다. -> 쿠키!
                     res.cookie("x_auth", user.token)
                     .status(200)
                     .json({ loginSuccess: true, userId: user._id })
@@ -112,6 +114,7 @@ app.get('/api/users/logout', auth, (req, res) => {
     })
 }) //app.get(logout)
 
+const port = 5000
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
